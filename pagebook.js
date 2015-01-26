@@ -1,9 +1,9 @@
 var PageBook = (function() {
 
-  var server;
+  var _db;
 
   function PageBook() {
-    db.open({
+    _db = db.open({
       server: 'pagebook',
       version: 1,
       schema: {
@@ -14,17 +14,19 @@ var PageBook = (function() {
           }
         }
       }
-    }).then(function(s) {
-      server = s;
     });
   }
 
   PageBook.prototype.add = function(param) {
-    return server.pagebook.add(param);
+    return _db.then(function(db) {
+      return db.pagebook.add(param);
+    });
   }
 
   PageBook.prototype.findAll = function() {
-    return server.pagebook.query().filter().execute();
+    return _db.then(function(db) {
+      return db.pagebook.query().filter().execute();
+    });
   }
 
   return PageBook;

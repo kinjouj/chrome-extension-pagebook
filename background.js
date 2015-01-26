@@ -4,19 +4,18 @@
   var browserActionWindow = null;
 
   chrome.browserAction.onClicked.addListener(function() {
-    if (browserActionWindow === null) {
-      chrome.windows.create(
-        {
-          url: "popup.html",
-          width: 500,
-          height: 800,
-          type: "panel"
-        },
-        function(w) {
-          browserActionWindow = w;
-        }
-      );
+    if (brwoserActionWindow !== null) {
+      return;
     }
+
+    chrome.windows.create({
+      url: "popup.html",
+      width: 500,
+      height: 800,
+      type: "panel"
+    }, function(w) {
+      browserActionWindow = w;
+    });
   });
 
   createContextMenu(
@@ -35,6 +34,7 @@
         add(tab);
         break;
       case "pagebook_ctxmenu_add_all":
+        addAll();
         break;
 
       default:
@@ -57,8 +57,19 @@
     var title = tab.title;
     var url   = tab.url;
 
-    pagebook.add({ "title": title, "url": url }).then(function() {
-      Notify.send(tab.id, "update", (title + " " + url));
+    pagebook.add({ "title": title, "url": url })
+      .then(function() {
+        Notify.send(tab.id, "update", (title + " " + url));
+      });
+  }
+
+  function addAll() {
+    chrome.windows.getAll(function(wnds) {
+      wnds.forEach(function(wnd) {
+        chrome.tabs.getAllInWindow(wnd.id, function(tabs) {
+          tabs.forEach(add);
+        });
+      });
     });
   }
 

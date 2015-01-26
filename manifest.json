@@ -10,5 +10,5 @@
     "scripts": ["assets/js/db.js", "pagebook.js", "notify.js", "background.js"],
     "persistent": false
   },
-  "permissions": ["contextMenus", "notifications"]
+  "permissions": ["contextMenus", "notifications", "tabs"]
 }
