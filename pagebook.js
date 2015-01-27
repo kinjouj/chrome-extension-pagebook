@@ -1,9 +1,9 @@
 var PageBook = (function() {
 
-  var _db;
+  var pagebookDB;
 
   function PageBook() {
-    _db = db.open({
+    pagebookDB = db.open({
       server: 'pagebook',
       version: 1,
       schema: {
@@ -18,13 +18,13 @@ var PageBook = (function() {
   }
 
   PageBook.prototype.add = function(param) {
-    return _db.then(function(db) {
+    return pagebookDB.then(function(db) {
       return db.pagebook.add(param);
     });
   }
 
   PageBook.prototype.findAll = function() {
-    return _db.then(function(db) {
+    return pagebookDB.then(function(db) {
       return db.pagebook.query().filter().execute();
     });
   }
