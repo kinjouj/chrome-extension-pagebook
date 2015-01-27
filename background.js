@@ -4,7 +4,7 @@
   var browserActionWindow = null;
 
   chrome.browserAction.onClicked.addListener(function() {
-    if (brwoserActionWindow !== null) {
+    if (browserActionWindow !== null) {
       return;
     }
 
