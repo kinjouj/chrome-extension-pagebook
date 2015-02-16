@@ -15,6 +15,14 @@
       type: "panel"
     }, function(w) {
       browserActionWindow = w;
+
+      if (!chrome.windows.onRemoved.hasListeners()) {
+        chrome.windows.onRemoved.addListener(function(id) {
+          if (id === browserActionWindow.id) {
+            browserActionWindow = null;
+          }
+        });
+      }
     });
   });
 
@@ -52,15 +60,25 @@
   }
 
   var pagebook = new PageBook();
+  bg.pagebook = pagebook;
+
+  function isHttpUrl(url) {
+    var a = document.createElement('a');
+    a.setAttribute('href', url);
+
+    return a.protocol.match(/^https?:$/) ? true : false;
+  }
 
   function add(tab) {
     var title = tab.title;
     var url   = tab.url;
 
-    pagebook.add({ "title": title, "url": url })
-      .then(function() {
-        Notify.send(tab.id, "update", (title + " " + url));
-      });
+    if (isHttpUrl(url)) {
+      pagebook.add({ "title": title, "url": url })
+        .then(function() {
+          Notify.send(tab.id, "update", (title + " " + url));
+        });
+    }
   }
 
   function addAll() {
@@ -71,9 +89,5 @@
         });
       });
     });
-  }
-
-  bg.getPageBook = function() {
-    return pagebook;
   }
 })(this);
