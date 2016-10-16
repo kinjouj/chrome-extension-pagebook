@@ -1,0 +1,15 @@
+{
+  "name": "pagebook",
+  "version": "0.1",
+  "manifest_version": 2,
+  "default_locale": "ja",
+  "browser_action": {
+    "default_icon": "assets/images/icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["generated/background.js"],
+    "persistent": false
+  },
+  "permissions": ["contextMenus", "notifications", "tabs"]
+}
